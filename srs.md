@@ -28,6 +28,7 @@
 # HỆ THỐNG CAB
 
 ```text
+
 HỆ THỐNG CAB
 │
 ├── 1. KHÁCH HÀNG
@@ -60,5 +61,60 @@ HỆ THỐNG CAB
     ├── Cổng thanh toán
     ├── Dịch vụ bản đồ / định vị
     └── Dịch vụ thông báo
+```text
+# Business Requirements
 
-        
+| ID Business Requirement | Mô tả |
+| :--- | :--- |
+| **BR01** | Hệ thống phải cho phép **khách hàng đăng ký và quản lý tài khoản**. |
+| **BR02** | Hệ thống phải cho phép **khách hàng đăng nhập và xác thực tài khoản**. |
+| **BR03** | Hệ thống phải cho phép **khách hàng đặt xe** bằng cách cung cấp điểm đón, điểm đến và loại xe. |
+| **BR04** | Hệ thống phải **tìm kiếm và ghép tài xế phù hợp** với yêu cầu đặt xe của khách hàng. |
+| **BR05** | Hệ thống phải cho phép **tài xế nhận hoặc từ chối chuyến xe**. |
+| **BR06** | Hệ thống phải cho phép **khách hàng theo dõi trạng thái và vị trí chuyến xe**. |
+| **BR07** | Hệ thống phải cho phép **tài xế cập nhật trạng thái chuyến đi** từ khi nhận chuyến đến khi hoàn thành. |
+| **BR08** | Hệ thống phải hỗ trợ **tính toán và xử lý thanh toán** cho chuyến xe. |
+| **BR09** | Hệ thống phải lưu trữ và cho phép **khách hàng xem lịch sử chuyến đi**. |
+| **BR10** | Hệ thống phải cho phép **khách hàng đánh giá tài xế và chuyến đi**. |
+| **BR11** | Hệ thống phải cho phép **nhân viên vận hành quản lý khách hàng**. |
+| **BR12** | Hệ thống phải cho phép **nhân viên vận hành quản lý tài xế và phương tiện**. |
+| **BR13** | Hệ thống phải cho phép **nhân viên vận hành quản lý và giám sát các chuyến xe**. |
+| **BR14** | Hệ thống phải cho phép **nhân viên vận hành quản lý các giao dịch thanh toán**. |
+| **BR15** | Hệ thống phải hỗ trợ **xử lý và ghi nhận các sự cố phát sinh trong quá trình vận hành**. |
+| **BR16** | Hệ thống phải cung cấp **báo cáo về hoạt động đặt xe, tài xế, chuyến đi và giao dịch**. |
+| **BR17** | Hệ thống phải tích hợp **dịch vụ bản đồ và định vị** để xác định vị trí khách hàng, tài xế và tuyến đường. |
+| **BR18** | Hệ thống phải cung cấp **dịch vụ thông báo** cho khách hàng, tài xế và nhân viên vận hành khi có sự kiện liên quan. |
+
+# CAB SYSTEM
+
+```text
+                         CAB SYSTEM
+                             │
+        ┌────────────────────┼────────────────────┐
+        │                    │                    │
+        ▼                    ▼                    ▼
+  QUẢN LÝ TÀI KHOẢN      ĐẶT & THỰC HIỆN XE    QUẢN LÝ VẬN HÀNH
+        │                    │                    │
+        │                    │                    │
+   ┌────┴────┐          ┌────┴─────┐        ┌────┴────────┐
+   │         │          │          │        │             │
+   ▼         ▼          ▼          ▼        ▼             ▼
+Đăng ký   Đăng nhập   Đặt xe    Ghép tài xế  Quản lý     Quản lý
+tài khoản tài khoản               │          khách hàng   tài xế
+                                  │
+                                  ▼
+                            Nhận chuyến
+                                  │
+                                  ▼
+                         Thực hiện chuyến
+                                  │
+                         ┌────────┴────────┐
+                         ▼                 ▼
+                    Thanh toán       Theo dõi vị trí
+                         │
+                         ▼
+                  Hoàn thành chuyến
+                         │
+                    ┌────┴────┐
+                    ▼         ▼
+             Lịch sử chuyến  Đánh giá
