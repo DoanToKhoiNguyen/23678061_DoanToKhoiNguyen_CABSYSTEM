@@ -1,0 +1,108 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 07-trip-tracking
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /trips/{tripId}:
+    get:
+      tags:
+      - Trips
+      summary: Theo dõi chuyến đi
+      operationId: getTrip
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/TripId'
+      responses:
+        '200':
+          description: Thông tin chuyến đi
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+        '404':
+          description: Không tìm thấy chuyến đi
+  /trips/{tripId}/location:
+    post:
+      tags:
+      - Trips
+      summary: Cập nhật vị trí tài xế
+      operationId: updateLocation
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/TripId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LocationRequest'
+      responses:
+        '200':
+          description: Cập nhật vị trí thành công
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    TripId:
+      name: tripId
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Trip:
+      type: object
+      properties:
+        tripId:
+          type: integer
+        bookingId:
+          type: integer
+        driverId:
+          type: integer
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        fare:
+          type: number
+          format: double
+        status:
+          type: string
+          enum:
+          - ASSIGNED
+          - ARRIVING
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELLED
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        eta:
+          type: integer
+          description: Estimated time of arrival in minutes
+    LocationRequest:
+      type: object
+      required:
+      - latitude
+      - longitude
+      properties:
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double

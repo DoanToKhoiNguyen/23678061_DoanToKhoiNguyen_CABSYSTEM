@@ -1,0 +1,39 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 03-customer-cancel-booking
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /bookings/{bookingId}/cancel:
+    put:
+      tags:
+      - Customer
+      summary: Hủy chuyến
+      operationId: cancelBooking
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/BookingId'
+      responses:
+        '200':
+          description: Hủy chuyến thành công
+        '400':
+          description: Không thể hủy chuyến
+        '404':
+          description: Không tìm thấy booking
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    BookingId:
+      name: bookingId
+      in: path
+      required: true
+      schema:
+        type: integer

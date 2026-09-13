@@ -1,0 +1,50 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 05-driver-trip-actions
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /trips/{tripId}/accept:
+    put:
+      tags:
+      - Driver
+      summary: Tài xế nhận chuyến
+      operationId: acceptTrip
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/TripId'
+      responses:
+        '200':
+          description: Nhận chuyến thành công
+        '400':
+          description: Chuyến không còn khả dụng
+  /trips/{tripId}/reject:
+    put:
+      tags:
+      - Driver
+      summary: Tài xế từ chối chuyến
+      operationId: rejectTrip
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/TripId'
+      responses:
+        '200':
+          description: Từ chối chuyến thành công
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    TripId:
+      name: tripId
+      in: path
+      required: true
+      schema:
+        type: integer

@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 06-driver-trip-status
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /trips/{tripId}/status:
+    put:
+      tags:
+      - Driver
+      summary: Cập nhật trạng thái chuyến
+      operationId: updateTripStatus
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/TripId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripStatusRequest'
+      responses:
+        '200':
+          description: Cập nhật trạng thái thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    TripId:
+      name: tripId
+      in: path
+      required: true
+      schema:
+        type: integer
+  schemas:
+    Trip:
+      type: object
+      properties:
+        tripId:
+          type: integer
+        bookingId:
+          type: integer
+        driverId:
+          type: integer
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        fare:
+          type: number
+          format: double
+        status:
+          type: string
+          enum:
+          - ASSIGNED
+          - ARRIVING
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELLED
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        eta:
+          type: integer
+          description: Estimated time of arrival in minutes
+    TripStatusRequest:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+          enum:
+          - ARRIVING
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELLED

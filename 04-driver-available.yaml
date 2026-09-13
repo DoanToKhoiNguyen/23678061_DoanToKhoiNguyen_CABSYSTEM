@@ -1,0 +1,64 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 04-driver-available
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /drivers/available:
+    get:
+      tags:
+      - Driver
+      summary: Tìm tài xế phù hợp
+      operationId: findAvailableDrivers
+      security:
+      - bearerAuth: []
+      parameters:
+      - name: latitude
+        in: query
+        required: true
+        schema:
+          type: number
+          format: double
+      - name: longitude
+        in: query
+        required: true
+        schema:
+          type: number
+          format: double
+      responses:
+        '200':
+          description: Danh sách tài xế đang hoạt động
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Driver:
+      type: object
+      properties:
+        driverId:
+          type: integer
+        name:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+          enum:
+          - AVAILABLE
+          - BUSY
+          - OFFLINE
+        rating:
+          type: number
+          format: float

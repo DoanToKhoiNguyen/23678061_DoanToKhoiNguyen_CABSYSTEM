@@ -1,0 +1,187 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 10-operation
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /operation/customers:
+    get:
+      tags:
+      - Operation
+      summary: Quản lý khách hàng
+      operationId: getCustomers
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách khách hàng
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+  /operation/drivers:
+    get:
+      tags:
+      - Operation
+      summary: Quản lý tài xế
+      operationId: getDrivers
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách tài xế
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+  /operation/vehicles:
+    get:
+      tags:
+      - Operation
+      summary: Quản lý phương tiện
+      operationId: getVehicles
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách phương tiện
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Vehicle'
+  /operation/trips:
+    get:
+      tags:
+      - Operation
+      summary: Giám sát chuyến đi
+      operationId: getAllTrips
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách chuyến đi
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'
+  /operation/reports:
+    get:
+      tags:
+      - Operation
+      summary: Xem báo cáo vận hành
+      operationId: getReports
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Báo cáo chuyến đi, doanh thu và hiệu suất tài xế
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Trip:
+      type: object
+      properties:
+        tripId:
+          type: integer
+        bookingId:
+          type: integer
+        driverId:
+          type: integer
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+        fare:
+          type: number
+          format: double
+        status:
+          type: string
+          enum:
+          - ASSIGNED
+          - ARRIVING
+          - IN_PROGRESS
+          - COMPLETED
+          - CANCELLED
+        latitude:
+          type: number
+          format: double
+        longitude:
+          type: number
+          format: double
+        eta:
+          type: integer
+          description: Estimated time of arrival in minutes
+    Driver:
+      type: object
+      properties:
+        driverId:
+          type: integer
+        name:
+          type: string
+        phone:
+          type: string
+        status:
+          type: string
+          enum:
+          - AVAILABLE
+          - BUSY
+          - OFFLINE
+        rating:
+          type: number
+          format: float
+    Customer:
+      type: object
+      properties:
+        customerId:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+    Report:
+      type: object
+      properties:
+        totalTrips:
+          type: integer
+        totalRevenue:
+          type: number
+          format: double
+        cancelledTrips:
+          type: integer
+        averageDriverRating:
+          type: number
+          format: float
+    Vehicle:
+      type: object
+      properties:
+        vehicleId:
+          type: integer
+        driverId:
+          type: integer
+        licensePlate:
+          type: string
+        vehicleType:
+          type: string

@@ -1,0 +1,48 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 08-trip-fare
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /trips/{tripId}/fare:
+    get:
+      tags:
+      - Trips
+      summary: Tính cước chuyến đi
+      operationId: calculateFare
+      security:
+      - bearerAuth: []
+      parameters:
+      - $ref: '#/components/parameters/TripId'
+      responses:
+        '200':
+          description: Thông tin cước
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tripId:
+                    type: integer
+                  fare:
+                    type: number
+                    format: double
+                  currency:
+                    type: string
+                    example: VND
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    TripId:
+      name: tripId
+      in: path
+      required: true
+      schema:
+        type: integer

@@ -1,0 +1,95 @@
+openapi: 3.0.3
+info:
+  title: CAB System API - 02-customer-booking
+  description: Part of the CAB System API, split from the original OpenAPI YAML.
+  version: 1.0.0
+servers:
+- url: http://localhost:8080/api
+  description: Local development server
+paths:
+  /bookings:
+    post:
+      tags:
+      - Customer
+      summary: Đặt xe
+      operationId: createBooking
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookingRequest'
+      responses:
+        '201':
+          description: Tạo yêu cầu đặt xe thành công
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Booking'
+        '400':
+          description: Dữ liệu đặt xe không hợp lệ
+        '401':
+          description: Chưa đăng nhập
+    get:
+      tags:
+      - Customer
+      summary: Xem lịch sử đặt xe
+      operationId: getBookings
+      security:
+      - bearerAuth: []
+      responses:
+        '200':
+          description: Danh sách booking
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Booking'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Booking:
+      type: object
+      properties:
+        bookingId:
+          type: integer
+        customerId:
+          type: integer
+        pickupLocation:
+          type: string
+        destination:
+          type: string
+        bookingTime:
+          type: string
+          format: date-time
+        status:
+          type: string
+          enum:
+          - PENDING
+          - MATCHING
+          - ACCEPTED
+          - CANCELLED
+          - COMPLETED
+    BookingRequest:
+      type: object
+      required:
+      - pickupLocation
+      - destination
+      - vehicleType
+      properties:
+        pickupLocation:
+          type: string
+          example: Đại học Công nghiệp TP.HCM
+        destination:
+          type: string
+          example: Sân bay Tân Sơn Nhất
+        vehicleType:
+          type: string
+          example: CAR
