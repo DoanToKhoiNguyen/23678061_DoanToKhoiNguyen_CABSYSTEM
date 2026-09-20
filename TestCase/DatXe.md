@@ -1,0 +1,28 @@
+# Test Suite: Đặt Xe (Booking Scenario)
+
+**Test Scenario:** Khách hàng đặt xe
+
+---
+
+| Test Case ID | Test Case | Preconditions | Test Steps | Test Data | Expected Result | Priority |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **TC_BOOKING_01** | Đặt xe với thông tin hợp lệ | Khách hàng đã đăng nhập; tài khoản Active | Mở chức năng đặt xe → nhập điểm đón → nhập điểm đến → chọn loại xe → gửi yêu cầu | Pickup=ĐH Công nghiệp TP.HCM; Destination=Sân bay Tân Sơn Nhất; Vehicle=CAR | Yêu cầu đặt xe được tạo thành công và chuyển sang quy trình tìm tài xế | High |
+| **TC_BOOKING_02** | Điểm đón để trống | Khách hàng đã đăng nhập | Mở đặt xe → bỏ trống điểm đón → nhập điểm đến → chọn loại xe → gửi | Pickup=Empty; Destination=Sân bay Tân Sơn Nhất; Vehicle=CAR | Hệ thống báo điểm đón bắt buộc; không tạo booking | High |
+| **TC_BOOKING_03** | Điểm đến để trống | Khách hàng đã đăng nhập | Mở đặt xe → nhập điểm đón → bỏ trống điểm đến → chọn loại xe → gửi | Pickup=ĐH Công nghiệp TP.HCM; Destination=Empty; Vehicle=CAR | Hệ thống báo điểm đến bắt buộc; không tạo booking | High |
+| **TC_BOOKING_04** | Không chọn loại xe | Khách hàng đã đăng nhập | Nhập điểm đón và điểm đến → không chọn loại xe → gửi | Pickup=ĐH Công nghiệp TP.HCM; Destination=Sân bay Tân Sơn Nhất; Vehicle=Empty | Hệ thống báo loại xe bắt buộc; không tạo booking | High |
+| **TC_BOOKING_05** | Không nhập toàn bộ thông tin | Khách hàng đã đăng nhập | Mở đặt xe → để trống tất cả trường → gửi | Pickup=Empty; Destination=Empty; Vehicle=Empty | Hệ thống từ chối yêu cầu và hiển thị lỗi validation | High |
+| **TC_BOOKING_06** | Đặt xe khi chưa đăng nhập | Không có phiên đăng nhập hợp lệ | Gửi yêu cầu đặt xe mà không có token/xác thực | Pickup=ĐH Công nghiệp TP.HCM; Destination=Sân bay Tân Sơn Nhất; Vehicle=CAR | HTTP 401 hoặc yêu cầu đăng nhập; không tạo booking | High |
+| **TC_BOOKING_07** | Đặt xe với điểm đón và điểm đến giống nhau | Khách hàng đã đăng nhập | Nhập cùng một địa điểm cho điểm đón và điểm đến → chọn xe → gửi | Pickup=Sân bay Tân Sơn Nhất; Destination=Sân bay Tân Sơn Nhất; Vehicle=CAR | Hệ thống từ chối nếu không cho phép cùng điểm; không tạo booking | Medium |
+| **TC_BOOKING_08** | Đặt xe với địa điểm không hợp lệ | Khách hàng đã đăng nhập | Nhập địa điểm không tồn tại/không xác định → chọn xe → gửi | Pickup=XYZ123Unknown; Destination=ABC999Unknown; Vehicle=CAR | Hệ thống báo địa điểm không hợp lệ hoặc không thể xác định; không tạo booking | High |
+| **TC_BOOKING_09** | Đặt xe với loại xe không được hỗ trợ | Khách hàng đã đăng nhập | Nhập địa điểm hợp lệ → truyền loại xe ngoài danh sách hỗ trợ → gửi | Vehicle=MOTORCYCLE_XYZ | Request bị từ chối; không tạo booking với loại xe không hỗ trợ | High |
+| **TC_BOOKING_10** | Đặt xe với dữ liệu có khoảng trắng đầu/cuối | Khách hàng đã đăng nhập | Nhập dữ liệu có khoảng trắng → gửi yêu cầu | Pickup=' ĐH Công nghiệp TP.HCM '; Destination=' Sân bay Tân Sơn Nhất '; Vehicle=CAR | Hệ thống chuẩn hóa dữ liệu hoặc xử lý hợp lệ theo validation; không tạo dữ liệu sai do khoảng trắng | Medium |
+| **TC_BOOKING_11** | Đặt nhiều yêu cầu liên tiếp | Khách hàng đã đăng nhập | Gửi 2 yêu cầu đặt xe liên tiếp với cùng dữ liệu | Request 1 và Request 2 giống nhau | Hệ thống xử lý theo nghiệp vụ; không tạo booking trùng ngoài ý muốn | High |
+| **TC_BOOKING_12** | Đặt xe khi hệ thống không có tài xế sẵn sàng | Khách hàng đã đăng nhập; không có driver AVAILABLE | Nhập thông tin hợp lệ → gửi yêu cầu → hệ thống tìm tài xế | Pickup=ĐH Công nghiệp TP.HCM; Destination=Sân bay Tân Sơn Nhất; Vehicle=CAR | Hệ thống thông báo không tìm được tài xế cho khách hàng | High |
+| **TC_BOOKING_13** | Đặt xe và ưu tiên tài xế gần nhất | Có nhiều tài xế AVAILABLE ở các khoảng cách khác nhau | Tạo booking hợp lệ → kích hoạt tìm tài xế | Driver A=1 km; Driver B=5 km; Driver C=3 km | Hệ thống ưu tiên đề xuất/gán tài xế gần điểm đón nhất theo BRULE01 | High |
+| **TC_BOOKING_14** | Tài xế đầu tiên từ chối yêu cầu đặt xe | Có booking hợp lệ; có nhiều tài xế phù hợp | Tạo booking → Driver A từ chối → theo dõi quá trình ghép | Driver A=Reject; Driver B=Available | Hệ thống tự tìm/chuyển yêu cầu sang tài xế khác theo BRULE03 | High |
+| **TC_BOOKING_15** | Tài xế không phản hồi trong thời gian quy định | Có booking hợp lệ; tài xế được gửi yêu cầu | Tạo booking → không phản hồi từ tài xế → chờ hết thời gian quy định | Driver A=No response | Hệ thống coi yêu cầu là từ chối/quá hạn và tìm tài xế khác | High |
+| **TC_BOOKING_16** | Tài xế nhận yêu cầu đặt xe | Có booking hợp lệ; có tài xế AVAILABLE | Tạo booking → tài xế nhận yêu cầu | Driver A=Accept | Booking được ghép với tài xế; khách hàng nhận thông tin/trạng thái phù hợp | High |
+| **TC_BOOKING_17** | Kiểm tra trạng thái booking sau khi gửi | Khách hàng đã đăng nhập; dữ liệu đặt xe hợp lệ | Gửi yêu cầu đặt xe → kiểm tra booking vừa tạo | Pickup hợp lệ; Destination hợp lệ; Vehicle=CAR | Booking được tạo với trạng thái ban đầu phù hợp và chuyển sang bước tìm tài xế | High |
+| **TC_BOOKING_18** | Kiểm tra thông báo sau khi gửi yêu cầu đặt xe | Khách hàng đã đăng nhập; Notification Provider hoạt động | Gửi booking hợp lệ → kiểm tra thông báo | Booking hợp lệ | Khách hàng nhận thông báo tại đúng mốc sự kiện theo BR10/SR09 | Medium |
+| **TC_BOOKING_19** | Đặt xe với request thiếu trường pickup | API booking hoạt động | Gửi request trực tiếp không có field pickup | {destination:'Sân bay Tân Sơn Nhất', vehicleType:'CAR'} | API trả lỗi validation; không tạo booking | High |
+| **TC_BOOKING_20** | Đặt xe với request thiếu trường destination | API booking hoạt động | Gửi request trực tiếp không có field destination | {pickup:'ĐH Công nghiệp TP.HCM', vehicleType:'CAR'} | API trả lỗi validation; không tạo booking | High |
